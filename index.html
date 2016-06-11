@@ -5,14 +5,32 @@
 	<title>RPS Multiplayer</title>
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+	<!-- Reset CSS -->
+	<link rel="stylesheet" href="assets/css/reset.css">
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="assets/css/style.css">
 	<!-- Firebase Reference -->
-	<script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
 </head>
 <body>
-	<form id="name-form">
-		<input type="text" id="bame-input">
-		<input id="addName" type="submit" value="Start">
-	</form>
+	<div class="wrapper">
+		<h1>Rock, Paper, Scissors SHOOT!</h1>
+		<div class="greeting">
+			<form id="name-form">
+				<input type="text" id="name-input" placeholder="Name">
+				<input id="addName" type="submit" value="Start">
+			</form>
+		</div>
+		<div class="holder-box">
+			<div class="box player1">
+				<h2>Waiting for player 1</h2>
+			</div>
+			<div class="box results"></div>
+			<div class="box player2">
+				<h2>Waiting for player 2</h2>
+			</div>
+		</div>
+	</div>
 	<!-- Custom JavaScript -->
 	<script src="assets/javascript/app.js"></script>
 </body>
