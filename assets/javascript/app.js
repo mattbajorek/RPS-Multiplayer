@@ -4,35 +4,63 @@ $(document).on('ready', function() {
 	// Link to Firebase for viewer tracking
 	var presenceRef = new Firebase('https://game-rock-paper-scissors.firebaseio.com/.info/connected');
 	var players = new Firebase('https://game-rock-paper-scissors.firebaseio.com/players');
+	var turn = new Firebase('https://game-rock-paper-scissors.firebaseio.com/turn');
 	var player = 1;
 	//var userID = userRef.key();
 	var userRef;
+	var name;
 
-	$('#addName').on('click',function() {
+	$('#addName').one('click',function() {
+		// Gets player name
+		name = $('#name-input').val();
+		// Query database
 		database.once('value', function(snapshot) {
-		  if (snapshot.val() == null) {
+			var playerObj = snapshot.child('players');
+			var num = playerObj.numChildren();
+			// Add player 1
+		  if (num == 0) {
 		  	addPlayer(player);
-		  } else {
+		  // Check if player 1 disconnected and readd
+		  } else if (num == 1 && playerObj.val()[2] !== undefined) {
+		  	turn.set(1);
+		  	addPlayer(player);
+		  // Add player 2
+		  } else if (num == 1) {
 		  	player++;
+		  	// Create new child with player number
+				turn.set(1);
 		  	addPlayer(player);
+		  // Reject any more players
+		  } else {
+		  	console.log("Please wait until other players finish, then refresh screen.");
 		  }
 		});
 		return false;
 	});
 
 	function addPlayer(count) {
+		// Remove form
+		var greeting = $('.greeting');
+		greeting.empty();
+		// Show greeting
+		greeting.text('Hi ' + name + '! You are Player ' + player);
+		// Create new child with player number
 		userRef = players.child(count);
+		// Allows for disconnect
 		userRef.onDisconnect().remove();
+		// Sets children of player number
 		userRef.set({
-			'name': 'Matt',
+			'name': name,
 			'wins': 0,
 			'losses': 0
 		});
 	}
 
-	/*players.on('value', function(snapshot) {
-	  console.log(snapshot.val());
-	});	
+/*
+	players.on('child_changed', function(oldChildSnapshot) {
+	  console.log(oldChildSnapshot.val());
+	});
+
 
 	presenceRef.on('value', function(snapshot) {
 	  if (snapshot.val()) {
