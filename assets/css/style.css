@@ -8,7 +8,7 @@ body {
   height: 100%;
 }
 
-h1, h2 {
+h1, h2, h3 {
 	text-align: center;
 }
 
@@ -19,6 +19,17 @@ h1 {
 
 h2 {
 	font-size: 4vh;
+}
+
+h3 {
+
+}
+
+a {
+	display: block;
+	text-decoration: none;
+	font-size: 4vh;
+	margin: 3vw;
 }
 
 .wrapper {
@@ -49,4 +60,10 @@ h2 {
 	margin: 2vw;
 	padding: 0.5vw;
 	text-align: center;
+}
+
+.score {
+	position: absolute;
+	bottom: 0.5vw;
+	left: 35%;
 }
