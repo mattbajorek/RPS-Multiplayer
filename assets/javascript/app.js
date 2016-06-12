@@ -6,6 +6,7 @@ $(document).on('ready', function() {
 	var turnRef = new Firebase('https://game-rock-paper-scissors.firebaseio.com/turn');
 	// Initialize variables
 	var player;
+	var otherPlayer;
 	var playerName;
 	var userRef;
 	var name = {};
@@ -126,11 +127,11 @@ $(document).on('ready', function() {
 			var $h1 = $('<h1>').text(selection)
 			$('.choices' + player).empty().append($h1);
 			// Show waiting message
-			var num = player == 1 ? 2:1;
-			$('h4').text('Waiting for ' + name[num] + ' to choose.')
+			otherPlayer = player == 1 ? 2:1;
+			$('h4').text('Waiting for ' + name[otherPlayer] + ' to choose.')
 			// Listen for turnNum
 			var turnNum
-			turnRef.on('value', function(snapshot) {
+			turnRef.once('value', function(snapshot) {
 				turnNum = snapshot.val();
 			});
 			// Increment turn
@@ -158,6 +159,44 @@ $(document).on('ready', function() {
 			$('.player2').css('border','1px solid black');
 			$('.results').css('border','4px solid yellow');
 			$('h4').text("");
+			// Compute winner and display
+			var outcome = game.winner();
+			$('.results').text(outcome);
+		},
+		winner: function() {
+			// Get choices from database
+			var choice1; 
+			var choice2;
+			playersRef.once('value', function(snapshot) {
+				choice1 = snapshot.val()[1].choice;
+				choice2 = snapshot.val()[2].choice;
+			});
+			// Show other player's choice
+			var textChoice = otherPlayer == 1 ? choice1:choice2;
+			var $h1 = $('<h1>').text(textChoice)
+			$('.choices' + otherPlayer).append($h1);
+			// Logic for finding winner
+			if (choice1 == choice2) {
+				return "Tie!";
+			} else if (choice1 == 'Rock') {
+				if (choice2 == 'Paper') {
+					return String(name[2]) + ' Wins!';
+				} else if (choice2 == 'Scissors') {
+					return String(name[1]) + ' Wins!';
+				}
+			} else if (choice1 == 'Paper') {
+				if (choice2 == 'Rock') {
+					return String(name[1]) + ' Wins!';
+				} else if (choice2 == 'Scissors') {
+					return String(name[2]) + ' Wins!';
+				}
+			} else if (choice1 == 'Scissors') {
+				if (choice2 == 'Rock') {
+					return String(name[2]) + ' Wins!';
+				} else if (choice2 == 'Paper') {
+					return String(name[1]) + ' Wins!';
+				}
+			}
 		}
 	}
 	// Start game
