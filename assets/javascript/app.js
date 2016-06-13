@@ -21,7 +21,8 @@ $(document).on('ready', function() {
 		listeners: function() {
 			// Listen for a more than two clients
 			database.on("value", function(snapshot) {
-				if (snapshot.child('turn').val() !== null && player == undefined) {
+				var turnVal = snapshot.child('turn').val();
+				if (turnVal !== null && player == undefined) {
 					var wrapper = $('.wrapper');
 					var $h1 = $('<h1>').text('Rock, Paper, Scissors SHOOT!');
 					var $h2 = $('<h2>').text('Please wait until other players finish, then refresh screen.');
@@ -41,13 +42,25 @@ $(document).on('ready', function() {
 				// Gets player names
 				name[key] = childSnapshot.val().name;
 				$('.player' + key + ' > h2').text(name[key]);
-				$('.score' + key).text('Wins: 0 Losses: 0');
+				// Get player wins and losses
+				var wins = childSnapshot.val().wins;
+				var losses = childSnapshot.val().losses;
+				$('.score' + key).text('Wins: ' + wins + ' Losses: ' + losses);
 			});
 			// Remove player name from box on disconnect
 			playersRef.on('child_removed', function(childSnapshot) {
+				// Find player that was removed
 				var key = childSnapshot.key();
+				// Empty turn message
+				$('h4').text('');
+				// Display beginning message
 				$('.player' + key + ' > h2').text('Waiting for player ' + key);
+				// Empty score
 				$('.score' + key).text('');
+				// Empty divs
+				$('.choices1').empty();
+				$('.results').empty();
+				$('.choices2').empty();
 			});
 			// Listen for each turn to direct to proper turn function
 			turnRef.on('value', function(snapshot) {
