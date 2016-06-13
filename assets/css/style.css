@@ -24,8 +24,8 @@ h2 {
 a {
 	display: block;
 	text-decoration: none;
-	font-size: 4vh;
-	margin: 3vw;
+	font-size: 3.5vh;
+	margin: 2vw;
 }
 
 .wrapper {
@@ -42,16 +42,16 @@ a {
 
 .holder-box {
 	position: relative;
-	width: 72vw;
-	height: 24vw;
+	width: 87vw;
+	height: 29vw;
 	margin: 0 auto;
 }
 
 .box {
 	position: relative;
 	float: left;
-	width: 20vw;
-	height: 20vw;
+	width: 25vw;
+	height: 25vw;
 	border: 1px solid black;
 	margin: 2vw;
 	padding: 0.5vw;
@@ -61,5 +61,10 @@ a {
 .score {
 	position: absolute;
 	bottom: 0.5vw;
-	left: 35%;
+	left: 30%;
+}
+
+.results {
+	padding: 2vw;
+	font-size: 5vw;
 }
