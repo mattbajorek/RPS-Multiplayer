@@ -28,6 +28,15 @@ a {
 	margin: 2vw;
 }
 
+#message-input {
+	width: 93%;
+}
+
+#addMessage {
+	width: 6%;
+	float: right;
+}
+
 .wrapper {
 	position: relative;
 	width: 100%;
@@ -40,11 +49,15 @@ a {
 	text-align: center;
 }
 
-.holder-box {
+.holder-box, .holder-messages {
 	position: relative;
 	width: 87vw;
 	height: 29vw;
 	margin: 0 auto;
+}
+
+.holder-messages {
+	width: 83vw;
 }
 
 .box {
@@ -56,6 +69,19 @@ a {
 	margin: 2vw;
 	padding: 0.5vw;
 	text-align: center;
+}
+
+.messages {
+	position: relative;
+	float: left;
+	width: 83vw;
+	height: 21vw;
+	border: 1px solid black;
+	margin-bottom: 1vw;
+}
+
+.messages > p {
+	padding: 0.25vw 0.5vw;
 }
 
 .score {
