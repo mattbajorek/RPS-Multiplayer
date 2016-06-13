@@ -37,6 +37,20 @@ a {
 	float: right;
 }
 
+#messages {
+	position: relative;
+	float: left;
+	width: 83vw;
+	height: 21vw;
+	border: 1px solid black;
+	margin-bottom: 1vw;
+	overflow-y: auto;
+}
+
+#messages > p {
+	padding: 0.25vw 0.5vw;
+}
+
 .wrapper {
 	position: relative;
 	width: 100%;
@@ -69,19 +83,6 @@ a {
 	margin: 2vw;
 	padding: 0.5vw;
 	text-align: center;
-}
-
-.messages {
-	position: relative;
-	float: left;
-	width: 83vw;
-	height: 21vw;
-	border: 1px solid black;
-	margin-bottom: 1vw;
-}
-
-.messages > p {
-	padding: 0.25vw 0.5vw;
 }
 
 .score {
