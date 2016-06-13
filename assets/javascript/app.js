@@ -1,20 +1,23 @@
+
 $(document).on('ready', function() {
 	// Links to Firebase
 	var database = new Firebase("https://game-rock-paper-scissors.firebaseio.com/");
 	var presenceRef = new Firebase('https://game-rock-paper-scissors.firebaseio.com/.info/connected');
 	var playersRef = new Firebase('https://game-rock-paper-scissors.firebaseio.com/playersRef');
 	var turnRef = new Firebase('https://game-rock-paper-scissors.firebaseio.com/turn');
+	var chatRef = new Firebase('https://game-rock-paper-scissors.firebaseio.com/chat');
 	// Initialize variables
 	var player;
 	var otherPlayer;
-	var playerName;
+	var name = {};
 	var userRef;
 	var wins1, wins2, losses1, losses2;
-	var name = {};
+	
 	var choices = ['Rock','Paper','Scissors'];
 	
-	// Remove turn when either player disconnects
+	// Remove turn and chat when either player disconnects
 	turnRef.onDisconnect().remove();
+	chatRef.onDisconnect().remove();
 
 	// Game Object
 	var game = {
@@ -52,7 +55,7 @@ $(document).on('ready', function() {
 				// Find player that was removed
 				var key = childSnapshot.key();
 				// Empty turn message
-				$('h4').text('');
+				$('h4').text('Waiting for another player to join.');
 				// Display beginning message
 				$('.player' + key + ' > h2').text('Waiting for player ' + key);
 				// Empty score
@@ -101,8 +104,6 @@ $(document).on('ready', function() {
 		setPlayer: function() {
 			// Query database
 			database.once('value', function(snapshot) {
-				// Gets player name
-				playerName = $('#name-input').val();
 				var playerObj = snapshot.child('playersRef');
 				var num = playerObj.numChildren();
 				// Add player 1
@@ -128,6 +129,8 @@ $(document).on('ready', function() {
 			});
 		},
 		addPlayer: function(count) {
+			// Gets player name
+			var playerName = $('#name-input').val();
 			// Remove form
 			var greeting = $('.greeting');
 			greeting.empty();
@@ -155,7 +158,7 @@ $(document).on('ready', function() {
 				// Show waiting message
 				$('h4').text('Waiting for ' + name[otherPlayer] + ' to choose.');
 			} else {
-				// Empty message
+				// Empty message for turn 3
 				$('h4').text('');
 			}
 		},
@@ -288,9 +291,58 @@ $(document).on('ready', function() {
 			window.setTimeout(function() {
 				// Reset turn to 1
 				turnRef.set(1);
-			}, 3000)
+			}, 3000);
 		}
 	}
 	// Start game
 	game.listeners();
+
+	// Chat object
+	var chat = {
+		message:'',
+		listeners: function() {
+			// Send button click
+			$('#addMessage').on('click',function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				chat.getMessage();
+				return false;
+			});
+			// Show message when received
+			chatRef.on('child_added', function(childSnapshot) {
+				// Get name and message
+				var playerName = childSnapshot.val().name;
+				var message = childSnapshot.val().message;
+				// Create p with display string
+				var $p = $('<p>').text(playerName + ': ' + message);
+				// If player 1 -> blue text
+				if (name[1] == playerName) {
+					$p.css('color','blue');
+				// If player 2 -> red text
+				} else if (name[2] == playerName) {
+					$p.css('color','red');
+				}
+				$('.messages').append($p);
+			});
+		},
+		getMessage: function() {
+			var input = $('#message-input');
+			// Get message then clear it
+			chat.message = input.val();
+			input.val('');
+			// Send data to database if player has name
+			if (player !== undefined) {
+				chat.sendData();
+			}
+		},
+		sendData: function() {
+			var obj = {};
+			obj['name'] = name[player];
+			obj['message'] = chat.message;
+			chatRef.push(obj);
+		}
+	}
+
+	// Start chat
+	chat.listeners();
 });
