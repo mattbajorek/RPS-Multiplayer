@@ -345,10 +345,10 @@ $(document).on('ready', function() {
 			var isScrolledToBottom = messages.scrollHeight - messages.clientHeight <= messages.scrollTop + 1;
 			// Create p with display string
 			var $p = $('<p>')
-			if (message ==' has disconnected.') {
+			if (message == ' has disconnected.' && player !== undefined) {
 				$p.text(playerName + message);
 				$p.css('background','gray');
-			} else {
+			} else if (player !== undefined) {
 				$p.text(playerName + ': ' + message);
 			}
 			// If player 1 -> blue text
