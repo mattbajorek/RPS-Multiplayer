@@ -407,7 +407,7 @@ $(document).on('ready', function() {
 			var messages = document.getElementById('messages');
 			var isScrolledToBottom = messages.scrollHeight - messages.clientHeight <= messages.scrollTop + 1;
 			// Create p with display string
-			var $p = $('<p>')
+			var $p = $('<p>');
 			if (message == ' has disconnected.' && player !== undefined) {
 				$p.text(playerName + message);
 				$p.css('background','gray');
@@ -422,10 +422,12 @@ $(document).on('ready', function() {
 				$p.css('color','red');
 			}
 			// Append message
-			$('#messages').append($p);
+			if ($p.text() !== '') {
+				$('#messages').append($p);
+			}
 			// Auto scroll to bottom
 			if (isScrolledToBottom) {
-				messages.scrollTop = messages.scrollHeight - messages.clientHeight;
+				messages.scrollTop = messages.scrollHeight - messages.clientHeight;;
 			}
 		}
 	}
