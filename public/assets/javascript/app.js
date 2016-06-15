@@ -13,7 +13,7 @@ $(document).on('ready', function() {
 	var userRef;
 	var wins1, wins2, losses1, losses2;
 	
-	var choices = ['Rock','Paper','Scissors'];
+	var choices = ['rock','paper','scissors'];
 	
 	// Remove turn and chat when either player disconnects
 	turnRef.onDisconnect().remove();
@@ -128,6 +128,9 @@ $(document).on('ready', function() {
 			  	// Start turn by setting turn to 1
 					turnRef.set(1);
 			  }
+			}, function (err) {
+				console.log(err);
+				//alert('Name is too long!');
 			});
 		},
 		addPlayer: function(count) {
@@ -166,7 +169,8 @@ $(document).on('ready', function() {
 		},
 		showChoice: function() {
 			for (i in choices) {
-				var $a = $('<a>').text(choices[i]);
+				var $a = $('<a>').html('<i class="fa fa-hand-' + choices[i] + '-o" aria-hidden="true"></i>');
+				$a.attr('data-choice',choices[i]);
 				$('.choices' + player).append($a);
 			}
 			// Listen for choice
@@ -174,12 +178,12 @@ $(document).on('ready', function() {
 		},
 		setChoice: function() {
 			// Send selection to database
-			var selection = $(this).text();
+			var selection = $(this).attr('data-choice');
 			userRef.update({
 				'choice': selection,
 			});
 			// Clear choices and add choice
-			var $h1 = $('<h1>').text(selection)
+			var $h1 = $('<h1>').html('<i class="fa fa-hand-' + selection + '-o" aria-hidden="true"></i>');
 			$('.choices' + player).empty().append($h1);
 			// Listen for turnNum
 			turnRef.once('value', function(snapshot) {
@@ -230,7 +234,7 @@ $(document).on('ready', function() {
 				losses2 = snap2.losses;
 				// Show other player's choice
 				var textChoice = otherPlayer == 1 ? choice1:choice2;
-				var $h1 = $('<h1>').text(textChoice)
+				var $h1 = $('<h1>').html('<i class="fa fa-hand-' + textChoice + '-o" aria-hidden="true"></i>');
 				$('.choices' + otherPlayer).append($h1);
 				game.logic();
 			});
@@ -239,22 +243,22 @@ $(document).on('ready', function() {
 			// Logic for finding winner
 			if (choice1 == choice2) {
 				game.winner(0);
-			} else if (choice1 == 'Rock') {
-				if (choice2 == 'Paper') {
+			} else if (choice1 == 'rock') {
+				if (choice2 == 'paper') {
 					game.winner(2);
-				} else if (choice2 == 'Scissors') {
+				} else if (choice2 == 'scissors') {
 					game.winner(1);
 				}
-			} else if (choice1 == 'Paper') {
-				if (choice2 == 'Rock') {
+			} else if (choice1 == 'paper') {
+				if (choice2 == 'rock') {
 					game.winner(1);
-				} else if (choice2 == 'Scissors') {
+				} else if (choice2 == 'scissors') {
 					game.winner(2);
 				}
-			} else if (choice1 == 'Scissors') {
-				if (choice2 == 'Rock') {
+			} else if (choice1 == 'scissors') {
+				if (choice2 == 'rock') {
 					game.winner(2);
-				} else if (choice2 == 'Paper') {
+				} else if (choice2 == 'paper') {
 					game.winner(1);
 				}
 			}
