@@ -339,7 +339,7 @@ $(document).on('ready', function() {
 			window.setTimeout(function() {
 				// Reset turn to 1
 				turnRef.set(1);
-				$('.results').text(results).css('z-index','-1');
+				$('.results').text('').css('z-index','-1');
 			}, 2000);
 	
 		},

@@ -11,6 +11,8 @@ body {
 }
 
 body {
+	/* Stop scrolling */
+	position: fixed;
 	/* No highlight on text */
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */
@@ -49,6 +51,8 @@ i {
 img {
   display: block;
   margin: 2vw auto;
+  max-width: 100%;
+  height: auto;
 }
 
 p {
@@ -270,4 +274,151 @@ p {
 }
 ::-webkit-scrollbar-thumb:window-inactive {
 	background: rgba(47,173,252,0.4); 
+}
+
+/* Media queries for mobile and tablet*/
+@media screen and (max-width: 780px) and (orientation: portrait) {
+	
+	i {
+		display: block;
+		width: 100%;
+		margin: 0.5vw;
+	}
+
+	img {
+		max-height: 20vw;
+	}
+
+	h1 {
+		font-size: 5vw;
+	}
+
+	h2 {
+		font-size: 4vw;
+	}
+
+	h3 {
+		font-size: 6vw;
+	}
+
+	h4 {
+		font-size: 5vw;
+		margin: 1vw;
+	}
+
+	.holder-box, .holder-messages {
+		width: 96vw;
+		height: 60vw;
+		margin: 2vw auto;
+	}
+
+	.box {
+		width: 47vw;
+		height: 100%;
+		border: 1px solid black;
+		padding: 1%;
+		text-align: center;
+		background: white;
+		border-radius: 2vw;
+	}
+
+	.player1 {
+		margin-right: 2vw;
+	}
+	
+	.fa-three-small {
+		font-size: 14vw;
+	}
+
+	.fa-one-large {
+		font-size: 30vw;
+	}
+
+	.waiting > .fa-one-large {
+		margin-top: 10vw;
+		font-size: 35vw;
+	}
+
+	.float-left {
+		margin-left: 0;
+	}
+
+	.float-right {
+		margin-right: 0;
+	}
+
+	.score {
+		bottom: 2.5vw;
+		height: 2vw;
+	}
+
+	p {
+		font-size: 4vw;
+	}
+
+	#message-input {
+		width: 85%;
+	}
+
+	#name-input, #addName {
+		font-size: 5vw;
+	}
+
+	#message-input, #addMessage {
+		font-size: 4vw;
+		padding: 0.25vw;
+	}
+
+	#addMessage {
+		width: 13%;
+	}
+
+	#messages {
+		height: 50vw;
+		margin: 0.5vw 0;
+	}
+
+	#messages > p {
+		padding: 0.25vw 0;
+	}
+
+	/* Choice1 animation */
+
+	.position-absolute-choice1 {
+		position: absolute;
+		top: 15vw;
+		right: 0;
+	}
+
+	@keyframes moveRight {
+	  
+	  to {
+	   right: -10vw;
+	  }
+
+	}
+
+	.choice1-end {
+	  right: -10vw;
+	}
+
+	/* Choice2 animation */
+
+	.position-absolute-choice2 {
+		position: absolute;
+		top: 15vw;
+		left: 0;
+	}
+
+	@keyframes moveLeft {
+	  
+	  to {
+	   left: -10vw;
+	  }
+
+	}
+
+	.choice2-end {
+	  left: -10vw;
+	}
 }
