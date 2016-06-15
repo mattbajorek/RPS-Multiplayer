@@ -16,7 +16,7 @@
 </head>
 <body>
 	<div class="wrapper">
-		<h1>Rock, Paper, Scissors SHOOT!</h1>
+		<img src="assets/images/header.png">
 		<div class="greeting">
 			<form id="name-form">
 				<input type="text" id="name-input" placeholder="Name">
@@ -25,15 +25,21 @@
 		</div>
 		<div class="holder-box">
 			<div class="box player1">
-				<h2>Waiting for player 1</h2>
-				<div class="choices1"></div>
+				<div class="waiting">
+					<h1>Waiting for player 1</h1>
+					<i class="fa fa-spinner fa-spin fa-one-large fa-fw"></i>
+				</div>
 				<div class="score score1"></div>
+				<div class="choices1"></div>
 			</div>
-			<div class="box results"></div>
+			<div class="results"></div>
 			<div class="box player2">
-				<h2>Waiting for player 2</h2>
-				<div class="choices2"></div>
+				<div class="waiting">
+					<h1>Waiting for player 2</h1>
+					<i class="fa fa-spinner fa-spin fa-one-large fa-fw"></i>
+				</div>
 				<div class="score score2"></div>
+				<div class="choices2"></div>
 			</div>
 		</div>
 		<div class="holder-messages">

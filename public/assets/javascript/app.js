@@ -27,9 +27,9 @@ $(document).on('ready', function() {
 				var turnVal = snapshot.child('turn').val();
 				if (turnVal !== null && player == undefined) {
 					var wrapper = $('.wrapper');
-					var $h1 = $('<h1>').text('Rock, Paper, Scissors SHOOT!');
-					var $h2 = $('<h2>').text('Please wait until other players finish, then refresh screen.');
-					wrapper.empty().append($h1).append($h2);
+					var $img = $('<img>').attr('src',"assets/images/header.png");
+					var $h1 = $('<h1>').text('Please wait until other players finish, then refresh screen.');
+					wrapper.empty().append($img).append($h1);
 					throw new Error('Please wait until other players finish, then refresh screen.');
 				}
 			});
@@ -44,11 +44,19 @@ $(document).on('ready', function() {
 				var key = childSnapshot.key();
 				// Gets player names
 				name[key] = childSnapshot.val().name;
-				$('.player' + key + ' > h2').text(name[key]);
+				// Remove loading and add player name
+				var waiting = $('.player' + key + ' > .waiting');
+				waiting.empty();
+				var $h1 = $('<h1>').text(name[key]);
+				waiting.append($h1);				
 				// Get player wins and losses
 				var wins = childSnapshot.val().wins;
 				var losses = childSnapshot.val().losses;
-				$('.score' + key).text('Wins: ' + wins + ' Losses: ' + losses);
+				var $wins = $('<h2>').text('Wins: ' + wins);
+				var $losses = $('<h2>').text('Losses: ' + losses);
+				$wins.addClass('float-left');
+				$losses.addClass('float-right');
+				$('.score' + key).append($wins).append($losses);
 			});
 			// Remove player name from box on disconnect
 			playersRef.on('child_removed', function(childSnapshot) {
@@ -59,7 +67,11 @@ $(document).on('ready', function() {
 				// Empty turn message
 				$('h4').text('Waiting for another player to join.');
 				// Display beginning message
-				$('.player' + key + ' > h2').text('Waiting for player ' + key);
+				var waiting = $('.player' + key + ' > .waiting');
+				waiting.empty();
+				var $h1 = $('<h1>').text('Waiting for player ' + key);
+				var $i = $('<i>').addClass('fa fa-spinner fa-spin fa-one-large fa-fw')
+				waiting.append($h1).append($i);
 				// Empty score
 				$('.score' + key).text('');
 				// Empty divs
@@ -90,7 +102,10 @@ $(document).on('ready', function() {
 					losses1 = childSnapshot.val();
 				}
 				// Update score display
-				$('.score1').text('Wins: ' + wins1 + ' Losses: ' + losses1);
+				if (wins1 !== undefined) {
+					$('.score1 .float-left').text('Wins: ' + wins1);
+					$('.score1 .float-right').text('Losses: ' + losses1);
+				}
 			});
 			// Listen for change in wins and losses for player 2
 			playersRef.child(2).on('child_changed', function(childSnapshot) {
@@ -100,7 +115,8 @@ $(document).on('ready', function() {
 					losses2 = childSnapshot.val();
 				}
 				// Update score display
-				$('.score2').text('Wins: ' + wins2 + ' Losses: ' + losses2);
+				$('.score2 .float-left').text('Wins: ' + wins2);
+				$('.score2 .float-right').text('Losses: ' + losses2);
 			});
 		},
 		setPlayer: function() {
@@ -128,9 +144,6 @@ $(document).on('ready', function() {
 			  	// Start turn by setting turn to 1
 					turnRef.set(1);
 			  }
-			}, function (err) {
-				console.log(err);
-				//alert('Name is too long!');
 			});
 		},
 		addPlayer: function(count) {
@@ -169,12 +182,14 @@ $(document).on('ready', function() {
 		},
 		showChoice: function() {
 			for (i in choices) {
-				var $a = $('<a>').html('<i class="fa fa-hand-' + choices[i] + '-o" aria-hidden="true"></i>');
-				$a.attr('data-choice',choices[i]);
-				$('.choices' + player).append($a);
+				var $i = $('<i>');
+				$i.addClass('fa fa-hand-' + choices[i] + '-o fa-three-small');
+				$i.attr('data-choice', choices[i]);
+				game.rotateChoice(player, $i, choices[i]);
+				$('.choices' + player).append($i);
 			}
 			// Listen for choice
-			$(document).one('mousedown','a', game.setChoice);
+			$(document).one('mousedown','i', game.setChoice);
 		},
 		setChoice: function() {
 			// Send selection to database
@@ -183,8 +198,12 @@ $(document).on('ready', function() {
 				'choice': selection,
 			});
 			// Clear choices and add choice
-			var $h1 = $('<h1>').html('<i class="fa fa-hand-' + selection + '-o" aria-hidden="true"></i>');
-			$('.choices' + player).empty().append($h1);
+			var $i = $('<i>');
+			$i.addClass('fa fa-hand-' + selection + '-o fa-one-large');
+			$i.attr('data-choice', selection);
+			$i.addClass('position-absolute-choice' + player);
+			game.rotateChoice(player, $i, selection);
+			$('.choices' + player).empty().append($i);
 			// Listen for turnNum
 			turnRef.once('value', function(snapshot) {
 				var turnNum = snapshot.val();
@@ -193,9 +212,22 @@ $(document).on('ready', function() {
 				turnRef.set(turnNum);
 			});
 		},
+		rotateChoice: function(person, element, choice) {
+			// Rotate each choice properly depending on the player
+			if (person == 1) {
+				if (choice == 'rock' || choice == 'paper') {
+					return element.addClass('fa-rotate-90');
+				} else {
+					return element.addClass('fa-flip-horizontal');
+				}				
+			} else if (person == 2) {
+				if (choice == 'rock' || choice == 'paper') {
+					return element.addClass('fa-rotate-270-flip-horizontal');
+				}
+			}
+		},
 		turn1: function() {
 			$('.player1').css('border','4px solid yellow');
-			$('.results').css('border','1px solid black');
 			// Show turn message
 			game.turnMessage(1);
 			// Show choices to player 1
@@ -215,7 +247,6 @@ $(document).on('ready', function() {
 		},
 		turn3: function() {
 			$('.player2').css('border','1px solid black');
-			$('.results').css('border','4px solid yellow');
 			// Remove turn message
 			game.turnMessage(3);
 			// Compute outcome
@@ -234,9 +265,14 @@ $(document).on('ready', function() {
 				losses2 = snap2.losses;
 				// Show other player's choice
 				var textChoice = otherPlayer == 1 ? choice1:choice2;
-				var $h1 = $('<h1>').html('<i class="fa fa-hand-' + textChoice + '-o" aria-hidden="true"></i>');
-				$('.choices' + otherPlayer).append($h1);
-				game.logic();
+				var $i = $('<i>');
+				$i.addClass('fa fa-hand-' + textChoice + '-o fa-one-large');
+				$i.addClass('position-absolute-choice' + otherPlayer);
+				$i.attr('data-choice', textChoice);
+				game.rotateChoice(otherPlayer, $i, textChoice);
+				$('.choices' + otherPlayer).append($i);
+
+				game.choiceAnimation();
 			});
 		},
 		logic: function() {
@@ -282,22 +318,45 @@ $(document).on('ready', function() {
 				// Incremement win and loss
 				wins++;
 				losses++;
-				// Set the wins and losses
-				playersRef.child(playerNum).update({
-					'wins': wins
-				});
+				// Gray loser
 				var otherPlayerNum = playerNum == 1 ? 2:1;
-				playersRef.child(otherPlayerNum).update({
-					'losses': losses
-				});
+				$('.choices' + otherPlayerNum + ' > i').css('opacity','0.5');
+				window.setTimeout(function() {
+					// Set the wins and losses
+					playersRef.child(playerNum).update({
+						'wins': wins
+					});
+					playersRef.child(otherPlayerNum).update({
+						'losses': losses
+					});
+				}, 500);
 			}
 			// Display results
-			$('.results').text(results);
+			window.setTimeout(function() {
+				$('.results').text(results).css('z-index','1');
+			}, 500);
 			// Change turn back to 1 after 3 seconds
 			window.setTimeout(function() {
 				// Reset turn to 1
 				turnRef.set(1);
-			}, 3000);
+				$('.results').text(results).css('z-index','-1');
+			}, 2000);
+	
+		},
+		choiceAnimation: function() {
+		  var $choice1 = $('.choices1 > i');
+		  var $choice2 = $('.choices2 > i');
+		  // Choice 1 animation
+		  $choice1.addClass('animation-choice1');
+		  $choice1.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {
+		    $choice1.addClass('choice1-end');
+		  });
+			// Choice 2 animation
+		  $choice2.addClass('animation-choice2');
+		  $choice2.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {
+		    $choice2.addClass('choice2-end');
+		    game.logic();
+		  });
 		}
 	}
 	// Start game
