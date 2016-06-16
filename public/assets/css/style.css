@@ -11,8 +11,6 @@ body {
 }
 
 body {
-	/* Stop scrolling */
-	position: fixed;
 	/* No highlight on text */
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */
@@ -280,8 +278,6 @@ p {
 @media screen and (max-width: 780px) and (orientation: portrait) {
 	
 	i {
-		display: block;
-		width: 100%;
 		margin: 0.5vw;
 	}
 
@@ -304,6 +300,10 @@ p {
 	h4 {
 		font-size: 5vw;
 		margin: 1vw;
+	}
+
+	.choices1 > i, .choices2 > i {
+		margin: 0.5vw 10vw;
 	}
 
 	.holder-box, .holder-messages {

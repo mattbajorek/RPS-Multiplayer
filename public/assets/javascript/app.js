@@ -341,7 +341,6 @@ $(document).on('ready', function() {
 				turnRef.set(1);
 				$('.results').text('').css('z-index','-1');
 			}, 2000);
-	
 		},
 		choiceAnimation: function() {
 		  var $choice1 = $('.choices1 > i');
