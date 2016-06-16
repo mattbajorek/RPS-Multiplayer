@@ -1,4 +1,3 @@
-
 $(document).on('ready', function() {
 	// Links to Firebase
 	var database = new Firebase("https://game-rock-paper-scissors.firebaseio.com/");
@@ -18,6 +17,9 @@ $(document).on('ready', function() {
 	// Remove turn and chat when either player disconnects
 	turnRef.onDisconnect().remove();
 	chatRef.onDisconnect().remove();
+
+	// Deal with android orientation change event
+	$(window).bind( 'orientationchange', function(e){});
 
 	// Game Object
 	var game = {
