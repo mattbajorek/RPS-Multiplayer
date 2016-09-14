@@ -19,7 +19,9 @@ $(document).on('ready', function() {
 	chatRef.onDisconnect().remove();
 
 	// Deal with android orientation change event
-	$(window).bind( 'orientationchange', function(e){});
+	$(window).bind( 'orientationchange', function(e){
+		
+	});
 
 	// Game Object
 	var game = {
