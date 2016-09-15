@@ -17,6 +17,16 @@ Player 2 Selects | Results
 -------------|--------
 ![Player 2 Selects Image](/readme_images/selection2.png?raw=true"selection2.png") | ![Result Image](/readme_images/winner.png?raw=true"winner.png")
 
+Disconnected | More Than Two Players
+-------------|--------
+![Disconnected Image](/readme_images/disconnected.png?raw=true"disconnected.png") | ![More Than Two Players Image](/readme_images/third.png?raw=true"third.png")
+
+## User Story
+* Only two users can play at the same time.
+* Each player chooses a move and then is told whether they won, lost, or there was a tie.
+* Each player's wins and losses will be tracked.
+* Throw some chat functionality in there, because no internet game is complete without having to endure endless taunts and insults from your opponent.
+
 ## Technologies used
 - HTML
 - CSS (media queries, font-awesome, animations)
